@@ -1,7 +1,7 @@
 #ifndef BARYCENTER_H
 #define BARYCENTER_H
 #pragma once
-//#include "NPoint.h"
+
 template <typename T>
 class Barycenter
 {
