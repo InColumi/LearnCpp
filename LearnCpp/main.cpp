@@ -4,9 +4,8 @@
 
 using namespace std;
 
-int main(int argc, char** argv)
+void ShowBarycenter()
 {
-	setlocale(LC_ALL, "rus");
 	int countPoints;
 	int sizePoint;
 	cout << "Введите размерность точки: "; cin >> sizePoint;
@@ -30,6 +29,58 @@ int main(int argc, char** argv)
 		cout << points[i] << endl;
 	}
 
+	cout << "Их барицентр: " << Barycenter<int>::getBarycenter(points, countPoints) << endl;
+}
 
+template <typename T>
+void ShowAdd(NPoint<T>& a, NPoint<T>& b)
+{
+	cout << "Точки, которые будем складывать: \n";
+	cout << a << endl;
+	cout << b << endl;
+	NPoint<double> c = a + b;
+	cout << "Результат: " << c << endl;
+}
+
+template <typename T>
+void ShowSub(NPoint<T>& a, NPoint<T>& b)
+{
+	cout << "Точки, которые будем вычитать: \n";
+	cout << a << endl;
+	cout << b << endl;
+	NPoint<double> c = a - b;
+	cout << "Результат: " << c << endl;
+}
+
+template <typename T>
+NPoint<T> GetNewPoint(int sizePoint)
+{
+	NPoint<T> a = NPoint<T>(sizePoint);
+	for(int i = 0; i < sizePoint; i++)
+	{
+		a[i] = 1 + rand() % 100;
+	}	
+	return a;
+}
+
+int main(int argc, char** argv)
+{
+	srand(time(0));
+	setlocale(LC_ALL, "rus");
+	try
+	{
+		ShowBarycenter();
+	}
+	catch(const char* exception)
+	{
+		cout << exception << endl;
+	}
+
+	int sizePoint = 5;
+	NPoint<double> a = GetNewPoint<double>(sizePoint);
+	NPoint<double> b = GetNewPoint<double>(sizePoint);
+
+	ShowAdd(a, b);
+	ShowSub(a, b);
 	return 0;
 }

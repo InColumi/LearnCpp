@@ -6,12 +6,12 @@ template <typename T>
 class Barycenter
 {
 public:
-	static NPoint<T> getBarycenter(NPoint<T>*& points, int countPoints)
+	static NPoint<double> getBarycenter(NPoint<T>*& points, int countPoints)
 	{
 		if(CheckSizes(points, countPoints))
 		{
 			int sizePoint = points[0].getSize();
-			NPoint<T> res(sizePoint);
+			NPoint<double> res(sizePoint);
 			for(int i = 0; i < sizePoint; i++)
 			{
 				for(int j = 0; j < countPoints; j++)

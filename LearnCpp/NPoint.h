@@ -261,7 +261,7 @@ public:
 	/// <param name="out"></param>
 	/// <param name="point"></param>
 	/// <returns></returns>
-	template <typename T> friend std::ostream& operator<< (std::ostream& out, const NPoint<T>& point)
+	friend std::ostream& operator<< (std::ostream& out, const NPoint<T>& point)
 	{
 		int size = point._size;
 		out << "Размер: " << size;
