@@ -11,11 +11,11 @@ void ShowBarycenter()
 	cout << "Введите размерность точки: "; cin >> sizePoint;
 	cout << "Введите кол-во точек: "; cin >> countPoints;
 	cout << endl;
-	NPoint<int>* points = new NPoint<int>[countPoints];
+	NPoint<int>* points = new NPoint<int>[countPoints]; // массив точек для проверкаи барицентра
 	for(int i = 0; i < countPoints; i++)
 	{
 		cout << "Введите координату точки: [" << i << "]:" << endl;
-		points[i] = NPoint<int>(sizePoint);
+		points[i] = NPoint<int>(sizePoint); // заполнение точки соответствующей размерности
 		for(int j = 0; j < sizePoint; j++)
 		{
 			cout << "\tКоордината [" << j << "] = "; cin >> points[i][j];
@@ -53,9 +53,23 @@ void ShowSub(NPoint<T>& a, NPoint<T>& b)
 }
 
 template <typename T>
+void ShowLength(NPoint<T>& a)
+{
+	cout << "Точка модуль которой будем искать: \n";
+	cout << a << endl;
+	cout << "Результат: " << a.getLength() << endl;
+}
+
+/// <summary>
+/// Генераций координат точки
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="sizePoint"></param>
+/// <returns></returns>
+template <typename T>
 NPoint<T> GetNewPoint(int sizePoint)
 {
-	NPoint<T> a = NPoint<T>(sizePoint);
+	NPoint<T> a = NPoint<T>(sizePoint); // создание точки размерности sizePoint
 	for(int i = 0; i < sizePoint; i++)
 	{
 		a[i] = 1 + rand() % 100;
@@ -82,5 +96,6 @@ int main(int argc, char** argv)
 
 	ShowAdd(a, b);
 	ShowSub(a, b);
+	ShowLength(a);
 	return 0;
 }
