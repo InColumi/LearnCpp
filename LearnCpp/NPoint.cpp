@@ -1,21 +1,21 @@
-#include "NDimention.h"
+#include "NPoint.h"
 
 template <typename T>
-void NDemention<T>::ClearMemoryAndShowMessage(const char*& exception)
+void NPoint<T>::ClearMemoryAndShowMessage(const char*& exception) const
 {
 	std::cout << "Error: " << exception << '\n';
-	this->~NDemention();
+	this->~NPoint();
 	exit(-1);
 }
 
 template <typename T>
-bool NDemention<T>::IsCorrectIndex(int index)
+bool NPoint<T>::IsCorrectIndex(int index) const
 {
 	return index >= 0 && index < _size;
 }
 
 template <typename T>
-void NDemention<T>::CheckIndex(int index)
+void NPoint<T>::CheckIndex(int index) const
 {
 	if(IsCorrectIndex(index) == false)
 	{
@@ -24,7 +24,7 @@ void NDemention<T>::CheckIndex(int index)
 }
 
 template <typename T>
-void NDemention<T>::CheckSize(int size)
+void NPoint<T>::CheckSize(int size)
 {
 	if(size != _size || _size == 0)
 	{
@@ -33,11 +33,14 @@ void NDemention<T>::CheckSize(int size)
 }
 
 template <typename T>
-NDemention<T>::NDemention():_size(0), _array(NULL)
-{}
+NPoint<T>::NPoint()
+{
+	_size = 0;
+	_coordinates = NULL;
+}
 
 template <typename T>
-NDemention<T>::NDemention(int size)
+NPoint<T>::NPoint(int size)
 {
 	try
 	{
@@ -46,10 +49,10 @@ NDemention<T>::NDemention(int size)
 			throw "Отрицательная размерность!";
 		}
 		_size = size;
-		_array = new T[_size];
+		_coordinates = new T[_size];
 		for(int i = 0; i < _size; i++)
 		{
-			_array[i] = T();
+			_coordinates[i] = T();
 		}
 	}
 	catch(const char* exception)
@@ -59,33 +62,33 @@ NDemention<T>::NDemention(int size)
 }
 
 template <typename T>
-NDemention<T>::NDemention(const NDemention& point)
+NPoint<T>::NPoint(const NPoint& point)
 {
 	_size = point._size;
-	_array = new T[_size];
+	_coordinates = new T[_size];
 	for(int i = 0; i < _size; i++)
 	{
-		_array[i] = point._array[i];
+		_coordinates[i] = point._coordinates[i];
 	}
 }
 
 template <typename T>
-NDemention<T>::~NDemention()
+NPoint<T>::~NPoint()
 {
-	if(_array != NULL)
+	if(_coordinates != NULL)
 	{
 		_size = 0;
-		delete[]_array;
+		delete[]_coordinates;
 	}
 }
 
 template <typename T>
-T& NDemention<T>::operator[] (const int index)
+T& NPoint<T>::operator[] (const int index)
 {
 	try
 	{
 		CheckIndex(index);
-		return _array[index];
+		return _coordinates[index];
 	}
 	catch(const char* exception)
 	{
@@ -94,29 +97,43 @@ T& NDemention<T>::operator[] (const int index)
 }
 
 template <typename T>
-NDemention<T>& NDemention<T>::operator= (const NDemention<T>& point)
+const T& NPoint<T>::operator[] (const int index) const
+{
+	try
+	{
+		CheckIndex(index);
+		return _coordinates[index];
+	}
+	catch(const char* exception)
+	{
+		ClearMemoryAndShowMessage(exception);
+		return NULL;
+	}
+}
+
+template <typename T>
+NPoint<T>& NPoint<T>::operator= (const NPoint<T>& point)
 {
 	_size = point._size;
-	_array = new T[_size];
+	_coordinates = new T[_size];
 	for(int i = 0; i < _size; i++)
 	{
-		_array[i] = point._array[i];
+		_coordinates[i] = point._coordinates[i];
 	}
 	return *this;
 }
 
 template <typename T>
-NDemention<T> NDemention<T>::operator- (const NDemention<T>& point)
+NPoint<T> NPoint<T>::operator- (const NPoint<T>& point)
 {
 	try
 	{
 		CheckSize(point._size);
-		NDemention<T> answer(_size);
+		NPoint<T> answer(_size);
 		for(int i = 0; i < _size; i++)
 		{
-			answer._array[i] = _array[i] - point._array[i];
+			answer._coordinates[i] = _coordinates[i] - point._coordinates[i];
 		}
-		cout << answer << endl;
 		return answer;
 	}
 	catch(const char* exception)
@@ -126,17 +143,16 @@ NDemention<T> NDemention<T>::operator- (const NDemention<T>& point)
 }
 
 template <typename T>
-NDemention<T> NDemention<T>::operator+ (const NDemention<T>& point)
+NPoint<T> NPoint<T>::operator+ (const NPoint<T>& point)
 {
 	try
 	{
 		CheckSize(point._size);
-		NDemention<T> answer(_size);
+		NPoint<T> answer(_size);
 		for(int i = 0; i < _size; i++)
 		{
-			answer._array[i] = _array[i] + point._array[i];
+			answer._coordinates[i] = _coordinates[i] + point._coordinates[i];
 		}
-		cout << answer << endl;
 		return answer;
 	}
 	catch(const char* exception)
@@ -146,22 +162,22 @@ NDemention<T> NDemention<T>::operator+ (const NDemention<T>& point)
 }
 
 template <typename T>
-int NDemention<T>::getSize()
+int NPoint<T>::getSize()
 {
 	return _size;
 }
 
 template <typename T>
-double NDemention<T>::getLength()
+double NPoint<T>::getLength()
 {
 	try
 	{
 		if(_size >= 1)
 		{
-			double res = _array[0] * _array[0];
+			double res = (double)(_coordinates[0] * _coordinates[0]);
 			for(size_t i = 1; i < _size; i++)
 			{
-				res += _array[i] * _array[i];
+				res += (double)(_coordinates[i] * _coordinates[i]);
 			}
 			return sqrt(res);
 		}
@@ -173,22 +189,8 @@ double NDemention<T>::getLength()
 	catch(const char* exception)
 	{
 		ClearMemoryAndShowMessage(exception);
+		return double();
 	}
 }
 
-template <typename T>
-std::ostream& operator<< (std::ostream& out, NDemention<T>& point)
-{
-	int size = point.getSize();
-	out << "Размер: " << size;
-	if(size != 0)
-	{
-		out << ". -> [";
-		for(int i = 0; i < size - 1; i++)
-		{
-			out << point[i] << ", ";
-		}
-		out << point[size - 1] << "]";
-	}
-	return out;
-}
+

@@ -18,13 +18,16 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NDimention.cpp">
+    <ClCompile Include="NPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NDimention.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Barycenter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NPoint.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

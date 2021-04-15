@@ -140,10 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NDimention.cpp" />
+    <ClCompile Include="NPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NDimention.h" />
+    <ClInclude Include="Barycenter.h" />
+    <ClInclude Include="NPoint.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
