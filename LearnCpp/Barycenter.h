@@ -38,6 +38,28 @@ public:
 		}
 	}
 
+	static NPoint<double> getBarycenter(NPoint<T>& p1, NPoint<T>& p2)
+	{
+		if(p1.getSize() == p2.getSize()) // проверка, что все точки одинаковой размерности
+		{
+			int sizePoint = p1.getSize(); // считывание размерности, чтобы постоянно не обращаться
+			NPoint<double> res(sizePoint); // для сохранение результата
+			for(int i = 0; i < sizePoint; i++)
+			{
+				for(int j = 0; j < 2; j++)
+				{
+					res[i] += p1[j] + p2[j]; // суммирование координат
+				}
+				res[i] = res[i] / 2.0; // деление на общее кол-во координат
+			}
+			return res;
+		}
+		else
+		{
+			std::cout << "Точки разных измерений!" << std::endl;
+		}
+	}
+
 private:
 
 	/// <summary>

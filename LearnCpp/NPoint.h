@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #ifndef NPOINT_H
 #define NPOINT_H
 #pragma once
@@ -24,7 +25,7 @@ private:
 	/// Очищает память из под массива, выбрасывает исключение и останавливает программу
 	/// </summary>
 	/// <param name="exception">назваине исключения</param>
-	void ClearMemoryAndShowMessage(const char*& exception) const
+	void ClearMemoryAndShowMessage(const char* exception) const
 	{
 		std::cout << "Error: " << exception << '\n'; // вывести сообщение на монитор
 		this->~NPoint(); // вызов деструктора для очистки памяти из под массива координат
@@ -189,7 +190,7 @@ public:
 			CheckSize(point._size);
 			NPoint<T> answer(_size); // переменная для результата
 			for(int i = 0; i < _size; i++) // поэлементно отнимаем коордианты
-			{ 
+			{
 				answer._coordinates[i] = _coordinates[i] - point._coordinates[i];
 			}
 			return answer; // возвращаем результат
@@ -257,7 +258,7 @@ public:
 		catch(const char* exception)
 		{
 			ClearMemoryAndShowMessage(exception); // вывод сообщений с соответствующей ошибкой и останавливает программу
-			return double(); 
+			return double();
 		}
 	}
 
@@ -281,6 +282,20 @@ public:
 			out << point[size - 1] << "]";
 		}
 		return out;
+	}
+
+	friend std::istream& operator>> (std::istream& in, NPoint& point)
+	{
+		std::string input = std::string();
+		std::cout << "Введите размерность точки: "; in >> input;
+		point = NPoint<T>(stoi(input));
+		for(size_t i = 0; i < point._size; i++)
+		{
+			std::cout << "\tВведите координату [" << i << "] = ";
+			in >> input;
+			point[i] = stoi(input);
+		}
+		return in;
 	}
 };
 #endif
