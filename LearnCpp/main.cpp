@@ -96,7 +96,7 @@ void InputUser(int countPoint)
 				{
 					int l1 = points[point1].getLength();
 					int l2 = points[point2].getLength();
-					cout << "Вы выбрали сравнивать" << endl;
+					cout << "Вы выбрали " << ((numberOfCommand == 2) ? "сравнивать" : "находить длинну" ) << endl;
 					cout << "Длина точки 1: " << l1 << '\n';
 					cout << "Длина точки 2: " << l2 << '\n';
 					if(numberOfCommand == 2)
