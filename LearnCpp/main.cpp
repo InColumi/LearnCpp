@@ -1,162 +1,115 @@
 #include <iostream>
-#include "NPoint.h"
-#include "Barycenter.h"
 
 using namespace std;
 
-void InputUser(int countPoint)
+double getValueFunc_237_2_1(double x)
 {
-	NPoint<int>* points = new NPoint<int>[countPoint];
-	bool IsAllPointsInput = false;
-	int countInputPoints = 0;
-	while(IsAllPointsInput == false)
+	return cos(x * x + 1);
+}
+
+void Task_237_2_1()
+{
+	double PI = 3.141592;
+	double a = PI / 3.0;
+	double b = 3.0 * PI / 2.0;
+	int m = 10;
+	double h = (b - a) / (double)m;
+
+	int counter = 1;
+	for(double x = a; x < b; x += h)
 	{
-		cout << "Осталось ввести " << countPoint - countInputPoints << " точку(ек).\n";
-		try
-		{
-			cin >> points[countInputPoints];
-			countInputPoints++;
-			if(countInputPoints == countPoint)
-			{
-				IsAllPointsInput = true;
-			}
-			system("cls");
-		}
-		catch(...)
-		{
-			cout << "Ошибка ввода! Вводите корректные данные!" << endl;
-		}
+		cout << counter++ << " cos(" << x << "^2 + 1) = " << getValueFunc_237_2_1(x) << '\n';
 	}
-	bool isExit = false;
-	int point1;
-	int point2;
-	int numberOfCommand;
-	string input;
-	NPoint<int> res;
-	while(isExit == false)
+}
+
+double getValueFunc_2_2(double x)
+{
+	return log10(x) / 2.0;
+}
+
+double getApproximation(double x, double eps = 0.001)
+{
+	double sum = 0;
+	double x1 = x - 1;
+	double preciseValue = getValueFunc_2_2(x);
+	for(int n = 0; fabs(sum - preciseValue) > eps; n++)
 	{
-		cout << "Вы ввели точки: \n";
-		for(int i = 0; i < countPoint; i++)
-		{
-			cout << "№ " << i + 1 << " " << points[i] << endl;
-		}
-
-		cout << "Введите номера точек, с которыми будете работать:\n";
-		try
-		{
-			cout << "Номер первой точки: "; cin >> input;
-			point1 = stoi(input);
-			point1--;
-			cout << "Номер второй точки: "; cin >> input;
-			point2 = stoi(input);
-			point2--;
-			system("cls");
-		}
-		catch(...)
-		{
-			cout << "Вводите кооректные данные!" << endl;
-			continue;
-		}
-
-		while(isExit == false)
-		{
-			cout << "Точки можно:\n";
-			cout << "\t1 - вычитать\n";
-			cout << "\t2 - сравнивать\n";
-			cout << "\t3 - складывать\n";
-			cout << "\t4 - находить длинну\n";
-			cout << "\t5 - находить барицентр\n";
-			cout << "\t6 - выйти их программы\n";
-			cout << "Введите номер команды: "; cin >> input;
-			try
-			{
-				numberOfCommand = stoi(input);
-				system("cls");
-			}
-			catch(...)
-			{
-				cout << "Вводите коректные номера! Внимательнее!" << endl;
-			}
-			cout << "Вы выбрали точки: " << endl;
-			cout << points[point1] << endl;
-			cout << points[point2] << endl;
-
-			switch(numberOfCommand)
-			{
-				case 1:
-				{
-					cout << "Вы выбрали вычитать" << endl;
-
-					res = points[point1] - points[point2];
-					cout << "Результат: " << res << endl;
-					break;
-				}
-				case 2:
-				case 4:
-				{
-					int l1 = points[point1].getLength();
-					int l2 = points[point2].getLength();
-					cout << "Вы выбрали " << ((numberOfCommand == 2) ? "сравнивать" : "находить длинну" ) << endl;
-					cout << "Длина точки 1: " << l1 << '\n';
-					cout << "Длина точки 2: " << l2 << '\n';
-					if(numberOfCommand == 2)
-					{
-						cout << "Точка 1 " << ((l1 >= l2) ? ">=" : "<") << " точки 2.\n";
-					}					
-					break;
-				}
-				case 3:
-				{
-					cout << "Вы выбрали складывать" << endl;
-					res = points[point1] - points[point2];
-					cout << "Результат: " << res << endl;
-					break;
-				}
-				case 5:
-				{
-					cout << "Вы выбрали находить барицентр" << endl;
-					cout << Barycenter<int>::getBarycenter(points[point1], points[point2]) << endl;
-					break;
-				}
-				case 6:
-				{
-					isExit = true;
-					system("cls");
-					cout << "Программа закончила свою работу!" << endl;
-					break;
-				}
-				default:
-					cout << "Неизвестная комманда! Внимательнее!" << endl;
-					break;
-			}
-
-			cout << "\n\n";
-		}
+		sum += -x1 / (n + 1.0);
+		x1 *= (x - 1);
+		cout << sum << endl;
 	}
+	return sum;
+}
+
+void Task_2_2()
+{
+	double a = 0.2;
+	double b = 1.0;
+	int m = 10;
+	double h = (b - a) / (double)m;
+	for(double x = a; x <= b; x += h)
+	{
+		cout << "x = " << x << "; y = " << getApproximation(x) << " <---> " << getValueFunc_2_2(x) << "; \n";
+	}
+}
+
+double getValueFunc_2_4_239_1(double x)
+{
+	return 1.0 / sqrt(9.0 + x * x);
+}
+
+double getValueFunc_2_4_239_2(double x)
+{
+	double x2 = x * x;
+	return (x2 - 1) / ((x2 - 1) * (sqrt(x2 * x2 + 1)));
+}
+
+double getMethodTrapeze(double a, double b, int n, double (*f)(double))
+{
+	double h = (b - a) / n;
+	double sum = 0;
+	for(double i = 1; i < n; i++)
+	{
+		sum += f(a + i * h);
+	}
+	sum *= h;
+	sum += h * (f(a) + f(b)) / 2.0;
+	return sum;
+}
+
+double getPrecise_2_4_239_1(double x)
+{
+	return log10(x + sqrt(x * x + 9));
+}
+//
+//double getPrecise_2_4_239_2()
+//{
+//	return
+//}
+
+void Task_2_4_239()
+{
+	double a = 0;
+	double b = 2;
+	double eps = 0.0001;
+	double resPrev = getMethodTrapeze(a, b, 2, getValueFunc_2_4_239_1);
+	double resNext = 0.0;
+	for(int n = 3; fabs(resPrev - resNext) >= eps; n++)
+	{
+		resNext = resPrev;
+		resPrev = getMethodTrapeze(a, b, n, getValueFunc_2_4_239_1);
+		cout << fabs(resPrev - resNext) << endl;
+	}
+	cout << resPrev << " " << getPrecise_2_4_239_1(b) - getPrecise_2_4_239_1(a) << endl;
 }
 
 int main(int argc, char** argv)
 {
 	srand(time(0));
 	setlocale(LC_ALL, "rus");
-	string input;
-	int countPoint = 0;
-	try
-	{
-		cout << "Введите ко-во точек (больше 1): "; cin >> input;
-		countPoint = stoi(input);
-		if(countPoint > 1)
-		{
-			InputUser(countPoint);
-		}
-		else
-		{
-			cout << "Нужно вводить больше 1 точки!";
-		}		
-	}
-	catch(...)
-	{
-		cout << "Ошибка ввода кол-ва точек! Вводите корректные данные!";
-	}
+	//Task_237_2_1();
+	//Task_2_2();
+	Task_2_4_239();
+
 	return 0;
 }
