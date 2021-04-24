@@ -129,6 +129,52 @@ void Task_2_4_239()
 		<< getCheck(a, b, getPrecise_2_4_239_2) << endl;
 }
 
+/// <summary>
+/// Число Армстронга – это такое число из k цифр, для которого сумма k - х 
+/// степеней его цифр равна самому числу. Найти все числа Армстронга из трех цифр.
+/// </summary>
+void Task_249(int k)
+{
+	double res;
+	double size = 1000;
+	bool isNextNumber ;
+	int xPow;
+	int yPow;
+
+	for(size_t i = 100; i <= size; i++)
+	{
+		isNextNumber = false;
+		for(size_t x = 1; x <= 9; x++)
+		{
+			if(isNextNumber)
+			{
+				break;
+			}
+			xPow = pow(x, k);
+			for(size_t y = 1; y <= 9; y++)
+			{
+				if(isNextNumber)
+				{
+					break;
+				}
+				yPow = pow(y, k);
+				for(size_t z = 1; z <= 9; z++)
+				{
+					if(isNextNumber)
+					{
+						break;
+					}
+					if(i == (xPow + yPow + pow(z, k)))
+					{
+						cout << i << ", ";
+						isNextNumber = true;
+					}
+				}
+			}
+		}
+	}
+}
+
 int main(int argc, char** argv)
 {
 	srand(time(0));
@@ -136,6 +182,6 @@ int main(int argc, char** argv)
 	//Task_237_2_1();
 	//Task_2_2();
 	//Task_2_4_239();
-
+	Task_249(3);
 	return 0;
 }
