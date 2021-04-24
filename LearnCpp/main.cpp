@@ -1,4 +1,8 @@
 #include <iostream>
+#include <vector>
+#include <conio.h>
+#include <ctype.h>
+#include <string>
 
 using namespace std;
 
@@ -129,15 +133,10 @@ void Task_2_4_239()
 		<< getCheck(a, b, getPrecise_2_4_239_2) << endl;
 }
 
-/// <summary>
-/// Число Армстронга – это такое число из k цифр, для которого сумма k - х 
-/// степеней его цифр равна самому числу. Найти все числа Армстронга из трех цифр.
-/// </summary>
 void Task_249(int k)
 {
-	double res;
 	double size = 1000;
-	bool isNextNumber ;
+	bool isNextNumber;
 	int xPow;
 	int yPow;
 
@@ -175,6 +174,150 @@ void Task_249(int k)
 	}
 }
 
+void Print(vector<char> line)
+{
+	for(size_t i = 0; i < line.size(); i++)
+	{
+		cout << line[i];
+	}
+	cout << '\n';
+}
+
+void Print(vector<vector<char>> lines)
+{
+	for(size_t i = 0; i < lines.size(); i++)
+	{
+		cout << "[" << i + 1 << "] "; Print(lines[i]);
+	}
+	cout << '\n';
+}
+
+vector<vector<char>> getLines()
+{
+	bool isLastLine = false;
+	vector<vector<char>> lines = vector<vector<char>>(1);
+	int counter = 0;
+	int symbol;
+	cout << "Введите Y, чтобы закончить ввод.\n";
+	cout << "Нажмите Enter, чтобы закончить ввод текущей строки\n";
+	while(isLastLine == false)
+	{
+		symbol = _getch();
+		if(symbol == 'Y')
+		{
+			isLastLine = true;
+			cout << "Вы ввели " << counter + 1 << " строк.\n";
+		}
+		else if(symbol == 13)
+		{
+			lines.push_back(vector<char>());
+			counter++;
+			cout << "\tЗакончили ввод строки.\n";
+		}
+		else
+		{
+			cout << (char)symbol;
+			lines[counter].push_back((char)symbol);
+		}
+	}
+	return lines;
+}
+
+void ReplaseFirstSymbol(vector<char>& line)
+{
+	line[0] = (char)toupper(line[0]);
+	size_t size = line.size();
+	for(size_t i = 1; i < size; i++)
+	{
+		if(line[i] == ' ' && i + 1 < size)
+		{
+			line[i + 1] = (char)toupper(line[i + 1]);
+		}
+	}
+}
+
+void AllTask(string name, int command)
+{
+	system("cls");
+	cout << "Вы выбрали: " << name << ".\n";
+	vector<vector<char>> lines = getLines();
+	Print(lines);
+	int numberLine;
+	bool isCorrect = false;
+	while(isCorrect == false)
+	{
+		cout << "Введие номер строки: "; cin >> numberLine;
+		numberLine--;
+		if(numberLine >= 0 && numberLine < lines.size())
+		{
+			system("cls");
+			isCorrect = true;
+		}
+	}
+
+	switch(command)
+	{
+		case 1:
+		{
+			ReplaseFirstSymbol(lines[numberLine]);
+			Print(lines[numberLine]);
+			break;
+		}
+		case 2:
+		{
+
+			break;
+		}
+		case 3:
+		{
+
+			break;
+		}
+	}
+}
+
+void Task()
+{
+	bool isNextCommand = true;
+	while(isNextCommand)
+	{
+		cout << "1 - Замена всех первых строчных букв слов заглавными\n";
+		cout << "2 - Поиск в строке\n";
+		cout << "3 - Вставка текста из файла\n";
+		cout << "4 - выйти из программы\n";
+		int numberOfCommand;
+		cout << "Введите номер комманды: "; cin >> numberOfCommand;
+
+		switch(numberOfCommand)
+		{
+			case 1:
+			{
+				AllTask("Замена всех первых строчных букв слов заглавными", numberOfCommand);
+				break;
+			}
+			case 2:
+			{
+				AllTask("Вы выбрали: Поиск в строке", numberOfCommand);
+				break;
+			}
+			case 3:
+			{
+				AllTask("Вы выбрали: Вставка текста из файла", numberOfCommand);
+				break;
+			}
+			case 4:
+			{
+				cout << "Программа закончила свою работу!";
+				break;
+			}
+			default:
+				cout << "Неизвестаня комманда! Внимательнее.\n";
+				break;
+		}
+	}
+
+}
+
 int main(int argc, char** argv)
 {
 	srand(time(0));
@@ -182,6 +325,9 @@ int main(int argc, char** argv)
 	//Task_237_2_1();
 	//Task_2_2();
 	//Task_2_4_239();
-	Task_249(3);
+	//Task_249(3);
+	Task();
+
+
 	return 0;
 }
