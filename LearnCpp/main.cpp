@@ -24,32 +24,43 @@ void Task_237_2_1()
 
 double getValueFunc_2_2(double x)
 {
-	return log10(x) / 2.0;
+	return log10(x) / 2.0f;
 }
 
 double getApproximation(double x, double eps = 0.001)
 {
-	double sum = 0;
+	double sumPrev = -x + 1;
+	double sumNext = 0.0f;
 	double x1 = x - 1;
 	double preciseValue = getValueFunc_2_2(x);
-	for(int n = 0; fabs(sum - preciseValue) > eps; n++)
+	for(int n = 1; fabs(sumPrev - sumNext) > eps; n++)
 	{
-		sum += -x1 / (n + 1.0);
+		sumNext = sumPrev;
 		x1 *= (x - 1);
-		cout << sum << endl;
+		sumPrev -= x1 / (n + 1.0);
+		//cout << fabs(sumPrev - sumNext) << endl;
 	}
-	return sum;
+	return sumPrev;
 }
 
 void Task_2_2()
 {
 	double a = 0.2;
-	double b = 1.0;
+	double b = 1;
 	int m = 10;
-	double h = (b - a) / (double)m;
+	double eps = 0.0001;
+	double h = (b - a) / m;
+	double approximation;
+	double precise;
+	double diff;
 	for(double x = a; x <= b; x += h)
 	{
-		cout << "x = " << x << "; y = " << getApproximation(x) << " <---> " << getValueFunc_2_2(x) << "; \n";
+		approximation = getApproximation(x, eps);
+		precise = getValueFunc_2_2(x);
+		diff = fabs(fabs(precise) - fabs(approximation));
+		cout <<
+			"x = " << x << "; y = " << precise <<
+			" <---> " << approximation << ";\n";
 	}
 }
 
@@ -58,49 +69,64 @@ double getValueFunc_2_4_239_1(double x)
 	return 1.0 / sqrt(9.0 + x * x);
 }
 
+double getPrecise_2_4_239_1(double x)
+{
+	return log10(x + sqrt(x * x + 9));
+}
+
 double getValueFunc_2_4_239_2(double x)
 {
 	double x2 = x * x;
-	return (x2 - 1) / ((x2 - 1) * (sqrt(x2 * x2 + 1)));
+	return (x2 - 1) / ((x2 + 1) * (sqrt(x2 * x2 + 1)));
+}
+
+double getPrecise_2_4_239_2(double x)
+{
+	double sqrt2 = sqrt(2);
+	return -sqrt2 * asin(sin(2 * atan(x)) / sqrt2) / 2.0;
 }
 
 double getMethodTrapeze(double a, double b, int n, double (*f)(double))
 {
 	double h = (b - a) / n;
 	double sum = 0;
-	for(double i = 1; i < n; i++)
+	for(double i = a; i < b; i += h)
 	{
-		sum += f(a + i * h);
+		sum += f(i);
 	}
-	sum *= h;
-	sum += h * (f(a) + f(b)) / 2.0;
-	return sum;
+	return 0.5 * h * (f(a) + f(b)) + sum * h;
 }
 
-double getPrecise_2_4_239_1(double x)
+double getApproximationMethodTrapeze(double a, double b, double (*f)(double), double eps = 0.000001)
 {
-	return log10(x + sqrt(x * x + 9));
+	double resPrev = getMethodTrapeze(a, b, 1, f);
+	double resNext = 0.0;
+	for(int n = 2; fabs(resPrev - resNext) >= eps; n *= 2)
+	{
+		resNext = resPrev;
+		resPrev = getMethodTrapeze(a, b, n, f);
+		//cout << fabs(resPrev - resNext) << endl;
+	}
+	return resPrev;
 }
-//
-//double getPrecise_2_4_239_2()
-//{
-//	return
-//}
+
+double getCheck(double a, double b, double (*F)(double))
+{
+	return F(b) - F(a);
+}
 
 void Task_2_4_239()
 {
 	double a = 0;
 	double b = 2;
-	double eps = 0.0001;
-	double resPrev = getMethodTrapeze(a, b, 2, getValueFunc_2_4_239_1);
-	double resNext = 0.0;
-	for(int n = 3; fabs(resPrev - resNext) >= eps; n++)
-	{
-		resNext = resPrev;
-		resPrev = getMethodTrapeze(a, b, n, getValueFunc_2_4_239_1);
-		cout << fabs(resPrev - resNext) << endl;
-	}
-	cout << resPrev << " " << getPrecise_2_4_239_1(b) - getPrecise_2_4_239_1(a) << endl;
+	double eps = 0.00001;
+	cout << getApproximationMethodTrapeze(a, b, getValueFunc_2_4_239_1, eps) << " = "
+		<< getCheck(a, b, getPrecise_2_4_239_1) << endl;
+
+	a = 0;
+	b = 1;
+	cout << getApproximationMethodTrapeze(a, b, getValueFunc_2_4_239_2, eps) << " = "
+		<< getCheck(a, b, getPrecise_2_4_239_2) << endl;
 }
 
 int main(int argc, char** argv)
@@ -109,7 +135,7 @@ int main(int argc, char** argv)
 	setlocale(LC_ALL, "rus");
 	//Task_237_2_1();
 	//Task_2_2();
-	Task_2_4_239();
+	//Task_2_4_239();
 
 	return 0;
 }
