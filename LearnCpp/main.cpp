@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <ctype.h>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -236,6 +237,64 @@ void ReplaseFirstSymbol(vector<char>& line)
 	}
 }
 
+int FindWordInLine(string word, vector<char> line)
+{
+	int count = 0;
+	int sizeLine = line.size();
+	int sizeWord = word.size();
+	size_t j = 0;
+	for(size_t i = 0; i < sizeWord;)
+	{
+		for(size_t j = 0; j < sizeLine;)
+		{
+			if(line[j] == word[i])
+			{
+				++i;
+				++j;
+				count++;
+			}
+			else
+			{
+				++j;
+				i = 0;
+				count = 0;
+			}
+
+			if(count == sizeWord)
+			{
+				return sizeLine - i;
+			}
+		}
+	}
+	return -1;
+}
+
+vector<vector<char>>  ReadFromFile()
+{
+	string fileName;
+	cout << "Введите имя файла с расширением. "; cin >> fileName;
+	ifstream in;
+	in.open(fileName);
+	if(in.is_open() == false)
+	{
+		cout << "Такого файла - нет.\n";
+	}
+
+	string line;
+	vector<vector<char>> lines = vector<vector<char>>(1);
+
+	while(getline(in, line))
+	{
+		lines.push_back(vector<char>());
+		for(size_t i = 0; i < line.size(); i++)
+		{
+			lines[lines.size() - 1].push_back(line[i]);
+		}
+	}
+	in.close();
+	return lines;
+}
+
 void AllTask(string name, int command)
 {
 	system("cls");
@@ -265,12 +324,9 @@ void AllTask(string name, int command)
 		}
 		case 2:
 		{
-
-			break;
-		}
-		case 3:
-		{
-
+			string word;
+			cout << "Введите слово. "; cin >> word;
+			cout << FindWordInLine(word, lines[numberLine]) << '\n';
 			break;
 		}
 	}
@@ -302,13 +358,15 @@ void Task()
 			}
 			case 3:
 			{
-				AllTask("Вы выбрали: Вставка текста из файла", numberOfCommand);
+				cout << "Вы выбрали: Вставка текста из файла\n";
+				vector<vector<char>> lines = ReadFromFile();
+				Print(lines);
 				break;
 			}
 			case 4:
 			{
 				cout << "Программа закончила свою работу!";
-				break;
+				isNextCommand = false;
 			}
 			default:
 				cout << "Неизвестаня комманда! Внимательнее.\n";
