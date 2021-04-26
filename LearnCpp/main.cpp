@@ -237,10 +237,68 @@ void FilterByGenre()
 	ShowOnMonitor(films);
 }
 
+void FilterByDuration()
+{
+	vector<Film> films = ReadAllFiles();
+	double min = films[0].Duration;
+	int indexMin = 0;
+	double max = films[0].Duration;
+	int indexMax = 0;
+	for(size_t i = 1; i < films.size(); i++)
+	{
+		if(min > films[i].Duration)
+		{
+			min = films[i].Duration;
+			indexMin = i;
+		}
+
+		if(max < films[i].Duration)
+		{
+			max = films[i].Duration;
+			indexMax = i;
+		}
+	}
+
+	cout << "Film with min duration = " << min << endl;
+	cout << "Film with max duration = " << max << endl;
+}
+
+void FilterByActor()
+{
+	string actor;
+	cout << "Enter Actors: ";
+	cin.ignore();
+	getline(cin, actor);
+
+	vector<Film> films = ReadAllFiles();
+	vector<int> indexes;
+	vector<string> actors;
+	for(size_t i = 0; i < films.size(); i++)
+	{
+		actors = films[i].Actors;
+		for(size_t j = 0; j < actors.size(); j++)
+		{
+			if(actor == actors[j])
+			{
+				indexes.push_back(i);
+				break;
+			}
+		}
+	}
+
+	cout << "Films with actor: " << actor << endl;
+	for(size_t i = 0; i < indexes.size(); i++)
+	{
+		cout << films[indexes[i]].ShowInfo() << endl;
+	}
+}
+
 int main(int argc, char** argv)
 {
 	srand(time(0));
 	setlocale(LC_ALL, "rus");
-	FilterByGenre();
+	//FilterByGenre();
+	//FilterByDuration();
+	FilterByActor();
 	return 0;
 }
