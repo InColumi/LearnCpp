@@ -6,232 +6,65 @@
 #include <fstream>
 
 using namespace std;
-//
-//double getValueFunc_237_2_1(double x)
-//{
-//	return cos(x * x + 1);
-//}
-//
-//void Task_237_2_1()
-//{
-//	double PI = 3.141592;
-//	double a = PI / 3.0;
-//	double b = 3.0 * PI / 2.0;
-//	int m = 10;
-//	double h = (b - a) / (double)m;
-//
-//	int counter = 1;
-//	for(double x = a; x < b; x += h)
-//	{
-//		cout << counter++ << " cos(" << x << "^2 + 1) = " << getValueFunc_237_2_1(x) << '\n';
-//	}
-//}
-//
-//double getValueFunc_2_2(double x)
-//{
-//	return log10(x) / 2.0f;
-//}
-//
-//double getApproximation(double x, double eps = 0.001)
-//{
-//	double sumPrev = -x + 1;
-//	double sumNext = 0.0f;
-//	double x1 = x - 1;
-//	double preciseValue = getValueFunc_2_2(x);
-//	for(int n = 1; fabs(sumPrev - sumNext) > eps; n++)
-//	{
-//		sumNext = sumPrev;
-//		x1 *= (x - 1);
-//		sumPrev -= x1 / (n + 1.0);
-//		//cout << fabs(sumPrev - sumNext) << endl;
-//	}
-//	return sumPrev;
-//}
-//
-//void Task_2_2()
-//{
-//	double a = 0.2;
-//	double b = 1;
-//	int m = 10;
-//	double eps = 0.0001;
-//	double h = (b - a) / m;
-//	double approximation;
-//	double precise;
-//	double diff;
-//	for(double x = a; x <= b; x += h)
-//	{
-//		approximation = getApproximation(x, eps);
-//		precise = getValueFunc_2_2(x);
-//		diff = fabs(fabs(precise) - fabs(approximation));
-//		cout <<
-//			"x = " << x << "; y = " << precise <<
-//			" <---> " << approximation << ";\n";
-//	}
-//}
-//
-//double getValueFunc_2_4_239_1(double x)
-//{
-//	return 1.0 / sqrt(9.0 + x * x);
-//}
-//
-//double getPrecise_2_4_239_1(double x)
-//{
-//	return log10(x + sqrt(x * x + 9));
-//}
-//
-//double getValueFunc_2_4_239_2(double x)
-//{
-//	double x2 = x * x;
-//	return (x2 - 1) / ((x2 + 1) * (sqrt(x2 * x2 + 1)));
-//}
-//
-//double getPrecise_2_4_239_2(double x)
-//{
-//	double sqrt2 = sqrt(2);
-//	return -sqrt2 * asin(sin(2 * atan(x)) / sqrt2) / 2.0;
-//}
-//
-//double getMethodTrapeze(double a, double b, int n, double (*f)(double))
-//{
-//	double h = (b - a) / n;
-//	double sum = 0;
-//	for(double i = a; i < b; i += h)
-//	{
-//		sum += f(i);
-//	}
-//	return 0.5 * h * (f(a) + f(b)) + sum * h;
-//}
-//
-//double getApproximationMethodTrapeze(double a, double b, double (*f)(double), double eps = 0.000001)
-//{
-//	double resPrev = getMethodTrapeze(a, b, 1, f);
-//	double resNext = 0.0;
-//	for(int n = 2; fabs(resPrev - resNext) >= eps; n *= 2)
-//	{
-//		resNext = resPrev;
-//		resPrev = getMethodTrapeze(a, b, n, f);
-//		//cout << fabs(resPrev - resNext) << endl;
-//	}
-//	return resPrev;
-//}
-//
-//double getCheck(double a, double b, double (*F)(double))
-//{
-//	return F(b) - F(a);
-//}
-//
-//void Task_2_4_239()
-//{
-//	double a = 0;
-//	double b = 2;
-//	double eps = 0.00001;
-//	cout << getApproximationMethodTrapeze(a, b, getValueFunc_2_4_239_1, eps) << " = "
-//		<< getCheck(a, b, getPrecise_2_4_239_1) << endl;
-//
-//	a = 0;
-//	b = 1;
-//	cout << getApproximationMethodTrapeze(a, b, getValueFunc_2_4_239_2, eps) << " = "
-//		<< getCheck(a, b, getPrecise_2_4_239_2) << endl;
-//}
-//
-//void Task_249(int k)
-//{
-//	double size = 1000;
-//	bool isNextNumber;
-//	int xPow;
-//	int yPow;
-//
-//	for(size_t i = 100; i <= size; i++)
-//	{
-//		isNextNumber = false;
-//		for(size_t x = 1; x <= 9; x++)
-//		{
-//			if(isNextNumber)
-//			{
-//				break;
-//			}
-//			xPow = pow(x, k);
-//			for(size_t y = 1; y <= 9; y++)
-//			{
-//				if(isNextNumber)
-//				{
-//					break;
-//				}
-//				yPow = pow(y, k);
-//				for(size_t z = 1; z <= 9; z++)
-//				{
-//					if(isNextNumber)
-//					{
-//						break;
-//					}
-//					if(i == (xPow + yPow + pow(z, k)))
-//					{
-//						cout << i << ", ";
-//						isNextNumber = true;
-//					}
-//				}
-//			}
-//		}
-//	}
-//}
 
-void Print(vector<string> lines)
+struct Film
 {
-	for(size_t i = 0; i < lines.size(); i++)
+	string Name;
+	string Genre;
+	double Rating;
+	double Duration;
+	vector<string> Actors;
+	int RealeseYear;
+
+	Film(string name, string genre, double duration, double rating, int realeseYear, vector<string> actors)
 	{
-		cout << "[" << i + 1 << "] " << lines[i] << '\n';
+		Name = name;
+		Genre = genre;
+		Duration = duration;
+		Rating = rating;
+		RealeseYear = realeseYear;
+		Actors = actors;
 	}
-	cout << '\n';
-}
 
-vector<string> getLines()
-{
-	bool isLastLine = false;
-	vector<string> lines;
-	int counter = 0;
-	string line;
-	cout << "Вводите строки, чтобы закончить ввод - введите Done.\n";
-	cout << "Нажмите Enter, чтобы закончить ввод текущей строки\n";
-	cin.ignore(32767, '\n');
-	while(isLastLine == false)
+	Film()
 	{
-		getline(cin, line);
-		if(line == "Done")
-		{
-			isLastLine = true;
-			cout << "\nВы ввели " << counter << " строк.\n";
-		}
-		else
-		{
-			counter++;
-			lines.push_back(line);
-		}
+		Name = string();
+		Genre = string();
+		Duration = double();
+		Rating = double();
+		RealeseYear = int();
+		Actors = vector<string>();
 	}
-	return lines;
-}
 
-void UpperFirstSymbol(string& line)
-{
-	line[0] = (char)toupper(line[0]);
-	size_t size = line.size();
-	for(size_t i = 1; i < size; i++)
+	string ShowInfo()
 	{
-		if(line[i] == ' ' && i + 1 < size)
+		string line = "";
+		line += "Name: " + Name + '\n';
+		line += "Genre: " + Genre + '\n';
+		line += "Rating: " + to_string(Rating )+ '\n';
+		line += "Duration: " + to_string(Duration) + '\n';
+		line += "RealeseYear: " + RealeseYear + '\n';
+		line += "Actors: ";
+		for(size_t i = 0; i < Actors.size() - 1; i++)
 		{
-			line[i + 1] = (char)toupper(line[i + 1]);
+			line += Actors[i] + ", ";
 		}
+		line += Actors[Actors.size() - 1];
+
+		return line;
+	}
+};
+
+void ShowOnMonitor(vector<Film> films)
+{
+	for(size_t i = 0; i < films.size(); i++)
+	{
+		 cout << films[i].ShowInfo() << '\n';
 	}
 }
 
-size_t FindWordInLine(string word, string line)
+vector<Film> ReadFromFile(string fileName)
 {
-	return line.find(word);
-}
-
-vector<string>  ReadFromFile()
-{
-	string fileName;
-	cout << "Введите имя файла с расширением. "; cin >> fileName;
 	ifstream in;
 	in.open(fileName);
 	if(in.is_open() == false)
@@ -241,155 +74,73 @@ vector<string>  ReadFromFile()
 	}
 
 	string line;
-	vector<string> lines;
-
+	vector<Film> lines;
+	Film film;
 	while(getline(in, line))
 	{
-		lines.push_back(line);
+
+		for(size_t i = 0; i < 3; i++)
+		{
+
+		}
 	}
 	in.close();
 	return lines;
 }
 
-size_t InputNumberRow(size_t countRows)
+vector<Film> InputUser()
 {
-	size_t numberLine;
-	bool isCorrect = false;
-	while(isCorrect == false)
+	Film film;
+	vector<Film>  films;
+	bool isAddFilm = true;
+	char symbol;
+	bool isEnd = false;
+	string actor;
+	while(isAddFilm)
 	{
-		cout << "Введие номер строки: "; cin >> numberLine;
-		numberLine--;
-		if(numberLine >= 0 && numberLine < countRows)
+		cout << "Do you want to add film? Y(yes)\\N(no)";
+		symbol = _getch();
+		if(symbol == 'Y')
 		{
-			isCorrect = true;
-		}
-	}
-	return numberLine;
-}
+			cout << "Enter Name: "; cin >> film.Name;
+			cout << "Enter Genre: "; cin >> film.Genre;
+			cout << "Enter Rating: "; cin >> film.Rating;
+			cout << "Enter Duration: "; cin >> film.Duration;
+			cout << "Enter RealeseYear: "; cin >> film.RealeseYear;
 
-void AllTask(string name, int command)
-{
-	system("cls");
-	cout << "Вы выбрали: " << name << ".\n";
-	vector<string> lines;
-	size_t numberRow;
-	switch(command)
-	{
-		case 1:
-		{
-			lines = getLines();
-			Print(lines);
-			numberRow = InputNumberRow(lines.size());
-			UpperFirstSymbol(lines[numberRow]);
-			cout << lines[numberRow] << endl;
-			break;
-		}
-		case 2:
-		{
-			lines = getLines();
-			Print(lines);
-			string word;
-			numberRow = InputNumberRow(lines.size());
-			cout << lines[numberRow] << endl;
-			cout << "Введите слово. "; cin >> word;
-			cout << FindWordInLine(word, lines[numberRow]) << '\n';
-			break;
-		}
-		case 3:
-		{
-			vector<string> linesFromFile = ReadFromFile();
-			
-			cout << "Строки из файла: \n";
-			Print(linesFromFile);
-
-			lines = getLines();
-			cout << "Введенные строки: \n";
-			Print(lines);
-
-			cout << "Введите номер строки (из файла), которую хотите вставить: ";
-			size_t numberRowFromFile = InputNumberRow(linesFromFile.size());
-
-			cout << "Введите номер строки куда хотите вставить (введенные строки): ";
-			size_t numberRowInput = InputNumberRow(lines.size());
-
-			bool isCorrectIndex = false;
-			size_t pos;
-			while(isCorrectIndex == false)
+			while(isEnd == false)
 			{
-				cout << "Введите позицию, куда нужно вставить: "; cin >> pos;
-				if(pos >= 0 && pos < lines[numberRowInput].size())
+				cout << "Enter Actors (enter end for exit): "; cin >> actor;
+				if(actor == "exit")
 				{
-					isCorrectIndex = true;
+					system("cls");
+					isEnd = true;
 				}
 				else
 				{
-					cout << "Неверная позиция!\n";
+					film.Actors.push_back(actor);
 				}
 			}
-
-			auto iter = lines[numberRowInput].begin();
-
-			lines[numberRowInput].insert(iter + pos, linesFromFile[numberRowFromFile].begin(), linesFromFile[numberRowFromFile].end());
-			cout << lines[numberRowInput] << '\n';
-			break;
 		}
-	}
-}
-
-void Task()
-{
-	string textReplace = "Замена всех первых строчных букв слов заглавными";
-	string textSearch = "Поиск в строке";
-	string textInsertFromFile = "Вставка текста из файла";
-	bool isNextCommand = true;
-	while(isNextCommand)
-	{
-		cout << "1 - " << textReplace << "\n";
-		cout << "2 - " << textSearch << "\n";
-		cout << "3 - " << textInsertFromFile << "\n";
-		cout << "4 - выйти из программы\n";
-		int numberOfCommand;
-		cout << "Введите номер комманды: "; cin >> numberOfCommand;
-
-		switch(numberOfCommand)
+		else if (symbol == 'N')
 		{
-			case 1:
-			{
-				AllTask(textReplace, numberOfCommand);
-				break;
-			}
-			case 2:
-			{
-				AllTask(textSearch, numberOfCommand);
-				break;
-			}
-			case 3:
-			{
-				AllTask(textInsertFromFile, numberOfCommand);
-				break;
-			}
-			case 4:
-			{
-				cout << "Программа закончила свою работу!";
-				isNextCommand = false;
-				break;
-			}
-			default:
-				cout << "Неизвестаня комманда! Внимательнее.\n";
-				break;
+			system("cls");
+			isAddFilm = false;
 		}
+		else
+		{
+			cout << "Do you want to add film ? Y(yes)\N(no)";
+		}		
 	}
+	return films;
+	
 }
-
 int main(int argc, char** argv)
 {
 	setlocale(LC_ALL, "rus");
-	//Task_237_2_1();
-	//Task_2_2();
-	//Task_2_4_239();
-	//Task_249(3);
-	Task();
 
+	vector<Film> films = InputUser();
 
+	ShowOnMonitor(films);
 	return 0;
 }
