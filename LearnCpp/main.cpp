@@ -7,6 +7,8 @@
 
 using namespace std;
 
+const vector<string> _genres = {"action","comedy","drama","fantasy","horror"};
+
 struct Film
 {
 	string Name;
@@ -107,7 +109,7 @@ vector<Film> ReadFromFile(string fileName)
 	vector<Film> films;
 	Film film;
 	string genre = fileName.substr(0, fileName.size() - 4);
-	
+
 	while(getline(in, line))
 	{
 		film.Genre = genre;
@@ -190,13 +192,55 @@ vector<Film> InputUser()
 
 }
 
+void AddFilms(vector<Film>& achievefilms, vector<Film> newFilms)
+{
+	for(size_t i = 0; i < newFilms.size(); i++)
+	{
+		achievefilms.push_back(newFilms[i]);
+	}
+}
+
+vector<Film> ReadAllFiles()
+{
+	vector<Film> films;
+	for(size_t i = 0; i < _genres.size(); i++)
+	{
+		AddFilms(films, ReadFromFile(_genres[i] + ".txt"));
+	}
+	return films;
+}
+
+Film GetRandomFilm()
+{
+	vector<Film> films = ReadAllFiles();
+	return films[0 + rand() % (films.size() - 1)];
+}
+
+void FilterByGenre()
+{
+	bool isCorrect = false;
+	string genre;
+	while(isCorrect == false)
+	{
+		cout << "Enter genre: "; cin >> genre;
+		for(size_t i = 0; i < _genres.size(); i++)
+		{
+			if(genre == _genres[i])
+			{
+				isCorrect = true;
+				break;
+			}
+		}
+	}
+
+	vector<Film> films = ReadFromFile(genre + ".txt");
+	ShowOnMonitor(films);
+}
+
 int main(int argc, char** argv)
 {
+	srand(time(0));
 	setlocale(LC_ALL, "rus");
-
-	vector<Film> films = ReadFromFile("drama.txt");
-
-	ShowOnMonitor(films);
-
+	FilterByGenre();
 	return 0;
 }
