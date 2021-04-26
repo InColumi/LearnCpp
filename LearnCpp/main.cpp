@@ -36,22 +36,52 @@ struct Film
 		Actors = vector<string>();
 	}
 
+	string toStr()
+	{
+		string line;
+		line.append(Name + '\n');
+		line.append(to_string(Duration) + '\n');
+		line.append(to_string(Rating) + '\n');
+		line.append(to_string(RealeseYear) + '\n');
+		for(size_t i = 0; i < Actors.size(); i++)
+		{
+			line.append(Actors[i] + ",");
+		}
+		line.append("\n");
+		return line;
+	}
+
 	string ShowInfo()
 	{
-		string line = "";
-		line += "Name: " + Name + '\n';
-		line += "Genre: " + Genre + '\n';
-		line += "Rating: " + to_string(Rating) + '\n';
-		line += "Duration: " + to_string(Duration) + '\n';
-		line += "RealeseYear: " + RealeseYear + '\n';
-		line += "Actors: ";
+		string line;
+		line.append(Name);
+		line.append(" (");
+		line.append(Genre);
+		line.append(" " + to_string(Duration));
+		line.append(" min)\n");
+		line.append("Rating: ");
+		line.append(to_string(Rating));
+		line.append(" RealeseYear: ");
+		line.append(to_string(RealeseYear));
+		line.append("\n");
+		line.append("Actors: ");
 		for(size_t i = 0; i < Actors.size() - 1; i++)
 		{
-			line += Actors[i] + ", ";
+			line.append(Actors[i] + ", ");
 		}
-		line += Actors[Actors.size() - 1];
+		line.append(Actors[Actors.size() - 1]);
 
 		return line;
+	}
+
+	void Clear()
+	{
+		Name.clear();
+		Genre.clear();
+		Duration = double();
+		Rating = double();
+		RealeseYear = int();
+		Actors.clear();
 	}
 };
 
@@ -59,7 +89,7 @@ void ShowOnMonitor(vector<Film> films)
 {
 	for(size_t i = 0; i < films.size(); i++)
 	{
-		cout << films[i].ShowInfo() << '\n';
+		cout << films[i].ShowInfo() << "\n\n";
 	}
 }
 
@@ -74,18 +104,39 @@ vector<Film> ReadFromFile(string fileName)
 	}
 
 	string line;
-	vector<Film> lines;
+	vector<Film> films;
 	Film film;
+	string genre = fileName.substr(0, fileName.size() - 4);
+	
 	while(getline(in, line))
 	{
-
-		for(size_t i = 0; i < 3; i++)
+		film.Genre = genre;
+		film.Name = line;
+		getline(in, line);
+		film.Duration = stod(line);
+		getline(in, line);
+		film.Rating = stod(line);
+		getline(in, line);
+		film.RealeseYear = stoi(line);
+		getline(in, line);
+		string actor = "";
+		size_t start = 0;
+		size_t end = 0;
+		for(size_t i = 0; i < line.size(); i++)
 		{
-
+			if(line[i] == ',')
+			{
+				end = i;
+				actor = line.substr(start, end - start);
+				start = end + 1;
+				film.Actors.push_back(actor);
+			}
 		}
+		films.push_back(film);
+		film.Clear();
 	}
 	in.close();
-	return lines;
+	return films;
 }
 
 vector<Film> InputUser()
@@ -138,12 +189,14 @@ vector<Film> InputUser()
 	return films;
 
 }
+
 int main(int argc, char** argv)
 {
 	setlocale(LC_ALL, "rus");
 
-	vector<Film> films = InputUser();
+	vector<Film> films = ReadFromFile("drama.txt");
 
 	ShowOnMonitor(films);
+
 	return 0;
 }
