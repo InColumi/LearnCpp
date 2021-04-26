@@ -41,7 +41,7 @@ struct Film
 		string line = "";
 		line += "Name: " + Name + '\n';
 		line += "Genre: " + Genre + '\n';
-		line += "Rating: " + to_string(Rating )+ '\n';
+		line += "Rating: " + to_string(Rating) + '\n';
 		line += "Duration: " + to_string(Duration) + '\n';
 		line += "RealeseYear: " + RealeseYear + '\n';
 		line += "Actors: ";
@@ -59,7 +59,7 @@ void ShowOnMonitor(vector<Film> films)
 {
 	for(size_t i = 0; i < films.size(); i++)
 	{
-		 cout << films[i].ShowInfo() << '\n';
+		cout << films[i].ShowInfo() << '\n';
 	}
 }
 
@@ -95,45 +95,48 @@ vector<Film> InputUser()
 	bool isAddFilm = true;
 	char symbol;
 	bool isEnd = false;
-	string actor;
+	string actorName;
 	while(isAddFilm)
 	{
-		cout << "Do you want to add film? Y(yes)\\N(no)";
+		cout << "Do you want to add film? Y(yes)\\N(no): ";
 		symbol = _getch();
 		if(symbol == 'Y')
 		{
-			cout << "Enter Name: "; cin >> film.Name;
+			cout << "\nEnter Name: "; cin >> film.Name;
 			cout << "Enter Genre: "; cin >> film.Genre;
-			cout << "Enter Rating: "; cin >> film.Rating;
-			cout << "Enter Duration: "; cin >> film.Duration;
+			cout << "Enter Rating(double): "; cin >> film.Rating;
+			cout << "Enter Duration(double): "; cin >> film.Duration;
 			cout << "Enter RealeseYear: "; cin >> film.RealeseYear;
 
+			cout << "Enter Actors: Name and Surname (enter end for exit):\n";
+			cin.ignore(32767, '\n');
 			while(isEnd == false)
 			{
-				cout << "Enter Actors (enter end for exit): "; cin >> actor;
-				if(actor == "exit")
+				getline(cin, actorName);
+				if(actorName == "exit")
 				{
 					system("cls");
 					isEnd = true;
 				}
 				else
 				{
-					film.Actors.push_back(actor);
+					film.Actors.push_back(actorName);
 				}
 			}
+			films.push_back(film);
 		}
-		else if (symbol == 'N')
+		else if(symbol == 'N')
 		{
 			system("cls");
 			isAddFilm = false;
 		}
 		else
 		{
-			cout << "Do you want to add film ? Y(yes)\N(no)";
-		}		
+			cout << "Do you want to add film ? Y(yes)\\N(no)";
+		}
 	}
 	return films;
-	
+
 }
 int main(int argc, char** argv)
 {
