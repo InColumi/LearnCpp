@@ -1,2 +1,5 @@
-vector<vector<char>> lines = ReadFromFile();
-			Print(lines);
+A volunteer is worth twenty pressed men. It is widely known(1)
+ that a person who himself wanted to learn a language to become fluent in shorter time(1)
+ than someone who is forced to learn this language. People who learn a language because of their desire put a very high prioritise this activity(2)
+ and, accordingly(2)
+, achieve success. People who learn language under duress hardly master this new language(3).
