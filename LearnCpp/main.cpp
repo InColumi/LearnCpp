@@ -209,9 +209,8 @@ vector<Film> ReadAllFiles()
 	return films;
 }
 
-Film GetRandomFilm()
+Film GetRandomFilm(vector<Film>& films)
 {
-	vector<Film> films = ReadAllFiles();
 	return films[0 + rand() % (films.size() - 1)];
 }
 
@@ -236,9 +235,8 @@ void FilterByGenre()
 	ShowOnMonitor(films);
 }
 
-void FilterByDuration()
+void FilterByDuration(vector<Film>& films)
 {
-	vector<Film> films = ReadAllFiles();
 	double min = films[0].Duration;
 	size_t indexMin = 0;
 	double max = films[0].Duration;
@@ -282,9 +280,8 @@ void FilterByDuration()
 	}
 }
 
-void FilterByRating()
+void FilterByRating(vector<Film>& films)
 {
-	vector<Film> films = ReadAllFiles();
 	vector<double> ratings;
 	ratings.push_back(floor(films[0].Rating));
 	double rating;
@@ -338,13 +335,12 @@ void FilterByRating()
 	}
 }
 
-void FilterByActor()
+void FilterByActor(vector<Film>& films)
 {
 	string actor;
 	cout << "Enter Actors: ";
 	getline(cin, actor);
 
-	vector<Film> films = ReadAllFiles();
 	vector<size_t> indexFilms;
 	vector<string> actors;
 	for(size_t i = 0; i < films.size(); i++)
@@ -367,9 +363,8 @@ void FilterByActor()
 	}
 }
 
-void FilterByReaseYear()
+void FilterByReaseYear(vector<Film>& films)
 {
-	vector<Film> films = ReadAllFiles();
 	vector<int> years;
 	years.push_back(films[0].RealeseYear);
 	int year;
@@ -424,14 +419,71 @@ void FilterByReaseYear()
 
 void Recomendation()
 {
-	Film film;
-	film = GetRandomFilm();
-	//cout << film.getInfo() << '\n';
-	//FilterByGenre();
-	FilterByDuration();
-	//FilterByActor();
-	//FilterByRating();
-	//FilterByReaseYear();
+	bool isExit = false;
+	int numberOfCommand;
+	vector<Film> films = ReadAllFiles();
+	while(isExit == false)
+	{
+		cout << "Filter by\n";
+		cout << "\t1 - Actor\n";
+		cout << "\t2 - Genre\n";
+		cout << "\t3 - Rating\n";
+		cout << "\t4 - Duration\n";
+		cout << "\t5 - ReaseYear\n";
+		cout << "6 - Get Random Film\n";
+		cout << "7 - exit\n";
+		cout << "Enter number of command: "; cin >> numberOfCommand;
+		switch(numberOfCommand)
+		{
+			case 1:
+			{
+				system("cls");
+				FilterByActor(films);
+				break;
+			}
+			case 2:
+			{
+				system("cls");
+				FilterByGenre();
+				break;
+			}
+			case 3:
+			{
+				system("cls");
+				FilterByRating(films);
+				break;
+			}
+			case 4:
+			{
+				system("cls");
+				FilterByDuration(films);
+				break;
+			}
+			case 5:
+			{
+				system("cls");
+				FilterByReaseYear(films);
+				break;
+			}
+			case 6:
+			{
+				system("cls");
+				Film film;
+				film = GetRandomFilm(films);
+				cout << "Random film: " << '\n';
+				cout << film.getInfo() << '\n';
+				break;
+			}
+			case 7:
+			{
+				isExit = true;
+				break;
+			}
+			default:
+				cout << "Error numer of command!\n";
+				break;
+		}
+	}	
 }
 
 int main(int argc, char** argv)
