@@ -258,8 +258,28 @@ void FilterByDuration()
 		}
 	}
 
-	cout << "Film with min duration = " << min << endl;
-	cout << "Film with max duration = " << max << endl;
+	double inputDuration;
+	cout << "Enter duration in interval [" << min << "; " << max << "]: ";
+	bool isCorrect = false;
+	while(isCorrect == false)
+	{
+		cin >> inputDuration;
+		if(inputDuration >= min && inputDuration <= max)
+		{
+			isCorrect = true;
+		}
+	}
+
+	int fixValue = 20;
+	double duration;
+	for(size_t i = 0; i < films.size(); i++)
+	{
+		duration = films[i].Duration;
+		if(duration >= inputDuration - 20 && duration <= inputDuration + 20)
+		{
+			cout << films[i].getInfo() << "\n\n";
+		}
+	}
 }
 
 void FilterByRating()
@@ -347,15 +367,71 @@ void FilterByActor()
 	}
 }
 
+void FilterByReaseYear()
+{
+	vector<Film> films = ReadAllFiles();
+	vector<int> years;
+	years.push_back(films[0].RealeseYear);
+	int year;
+	int count = 0;
+	for(size_t i = 1; i < films.size(); i++)
+	{
+		year = films[i].RealeseYear;
+		for(size_t j = 0; j < years.size(); j++)
+		{
+			if(years[j] == year)
+			{
+				count++;
+			}
+		}
+		if(count == 0)
+		{
+			years.push_back(year);
+		}
+		count = 0;
+	}
+	sort(years.begin(), years.end());
+	for(size_t i = 0; i < years.size(); i++)
+	{
+		cout << years[i] << "\n";
+	}
+
+	cout << "Enter year from list: ";
+	bool isCorrect = false;
+	while(isCorrect == false)
+	{
+		cin >> year;
+		for(size_t i = 0; i < years.size(); i++)
+		{
+			if(year == years[i])
+			{
+				isCorrect = true;
+				break;
+			}
+		}
+	}
+
+	Film film;
+	for(size_t i = 0; i < films.size(); i++)
+	{
+		film = films[i];
+		if(film.RealeseYear == year)
+		{
+			cout << film.getInfo() << "\n\n";
+		}
+	}
+}
+
 void Recomendation()
 {
 	Film film;
 	film = GetRandomFilm();
 	//cout << film.getInfo() << '\n';
 	//FilterByGenre();
-	//FilterByDuration();
+	FilterByDuration();
 	//FilterByActor();
-	FilterByRating();
+	//FilterByRating();
+	//FilterByReaseYear();
 }
 
 int main(int argc, char** argv)
