@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <string>
 #include <fstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -53,7 +54,7 @@ struct Film
 		return line;
 	}
 
-	string ShowInfo()
+	string getInfo()
 	{
 		string line;
 		line.append(Name);
@@ -61,10 +62,8 @@ struct Film
 		line.append(Genre);
 		line.append(" " + to_string(Duration));
 		line.append(" min)\n");
-		line.append("Rating: ");
-		line.append(to_string(Rating));
-		line.append(" RealeseYear: ");
-		line.append(to_string(RealeseYear));
+		line.append("Rating: " + to_string(Rating));
+		line.append(". " + to_string(RealeseYear) + " year");
 		line.append("\n");
 		line.append("Actors: ");
 		for(size_t i = 0; i < Actors.size() - 1; i++)
@@ -91,7 +90,7 @@ void ShowOnMonitor(vector<Film> films)
 {
 	for(size_t i = 0; i < films.size(); i++)
 	{
-		cout << films[i].ShowInfo() << "\n\n";
+		cout << films[i].getInfo() << "\n\n";
 	}
 }
 
@@ -241,9 +240,9 @@ void FilterByDuration()
 {
 	vector<Film> films = ReadAllFiles();
 	double min = films[0].Duration;
-	int indexMin = 0;
+	size_t indexMin = 0;
 	double max = films[0].Duration;
-	int indexMax = 0;
+	size_t indexMax = 0;
 	for(size_t i = 1; i < films.size(); i++)
 	{
 		if(min > films[i].Duration)
@@ -263,15 +262,70 @@ void FilterByDuration()
 	cout << "Film with max duration = " << max << endl;
 }
 
+void FilterByRating()
+{
+	vector<Film> films = ReadAllFiles();
+	vector<double> ratings;
+	ratings.push_back(floor(films[0].Rating));
+	double rating;
+	int count = 0;
+	for(size_t i = 1; i < films.size(); i++)
+	{
+		rating = floor(films[i].Rating);
+		for(size_t j = 0; j < ratings.size(); j++)
+		{
+			if(ratings[j] == rating)
+			{
+				count++;
+			}
+		}
+		if(count == 0)
+		{
+			ratings.push_back(rating);
+		}
+		count = 0;
+	}
+	sort(ratings.begin(), ratings.end());
+	for(size_t i = 0; i < ratings.size() - 1; i++)
+	{
+		cout << ratings[i] << " --- ";
+	}
+	cout << ratings[ratings.size() - 1] << "\n\n";
+
+	cout << "Enter ratings from list: ";
+	bool isCorrect = false;
+	while(isCorrect == false)
+	{
+		cin >> rating;
+		for(size_t i = 0; i < ratings.size(); i++)
+		{
+			if(rating == ratings[i])
+			{
+				isCorrect = true;
+				break;
+			}
+		}
+	}
+
+	Film film;
+	for(size_t i = 0; i < films.size(); i++)
+	{
+		film = films[i];
+		if(floor(film.Rating) == rating)
+		{
+			cout << film.getInfo() << "\n\n";
+		}
+	}
+}
+
 void FilterByActor()
 {
 	string actor;
 	cout << "Enter Actors: ";
-	cin.ignore();
 	getline(cin, actor);
 
 	vector<Film> films = ReadAllFiles();
-	vector<int> indexes;
+	vector<size_t> indexFilms;
 	vector<string> actors;
 	for(size_t i = 0; i < films.size(); i++)
 	{
@@ -280,25 +334,33 @@ void FilterByActor()
 		{
 			if(actor == actors[j])
 			{
-				indexes.push_back(i);
+				indexFilms.push_back(i);
 				break;
 			}
 		}
 	}
 
-	cout << "Films with actor: " << actor << endl;
-	for(size_t i = 0; i < indexes.size(); i++)
+	cout << "\nFilms with actor: " << actor << "\n\n";
+	for(size_t i = 0; i < indexFilms.size(); i++)
 	{
-		cout << films[indexes[i]].ShowInfo() << endl;
+		cout << films[indexFilms[i]].getInfo() << "\n\n";
 	}
+}
+
+void Recomendation()
+{
+	Film film;
+	film = GetRandomFilm();
+	//cout << film.getInfo() << '\n';
+	//FilterByGenre();
+	//FilterByDuration();
+	//FilterByActor();
+	FilterByRating();
 }
 
 int main(int argc, char** argv)
 {
 	srand(time(0));
-	setlocale(LC_ALL, "rus");
-	//FilterByGenre();
-	//FilterByDuration();
-	FilterByActor();
+	Recomendation();
 	return 0;
 }
