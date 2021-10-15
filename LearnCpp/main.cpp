@@ -1,200 +1,78 @@
-#include <iostream>
-#include "windows.h"
 #include <string>
+#include <iostream>
+#include "Transport.h"
+
+/*
+Сам вариант:  Создать базовый класс «Транспорт» и производные от него классы «Автомобиль», «Поезд», «Самолет». 
+Создать базовый класс «Тип» и производные от него классы «Грузовой» и «Пассажирский». 
+На основе этих классов создать набор различных классов с использованием множественного наследования.
+
+Что общего между машиной, поездом, самолётом ?
+Поля класса Транспорт
+1) у них есть название
+2) посадочных мест
+3) дата выпуска
+4) цвет
+5) вес
+6) .... и хватит
+Методы
+1) получение каждого поля
+2) метод перемещение
+3) способ заправки
+
+Что у них разного ?
+Машина
+	1) едет по дороге
+	2) заправляется где угодно, где есть бензин
+Поезд
+	1) едет по рельсам
+	2) заправляется где угодно, где есть бензин
+Самолёт
+	1) летит
+	2) заправляется в аэропорту
+*/
 
 using namespace std;
 
-void Task1()
+class Car: Transport
 {
-	cout << "Enter phrase: ";
-	string userInput;
-	getline(cin, userInput);
+private:
+	float _mileage;
 
-	for(size_t i = 0; i < userInput.size(); i++)
+
+public:
+	Car() : Transport() {}
+	Car(float mileage, std::string name, unsigned int countOfSeats, std::string dateOfBirth, std::string color, float weight) 
+		: Transport(name, countOfSeats, dateOfBirth, color, weight)
 	{
-		cout << userInput[i];
-		Sleep(100); // Задержка в милиСек
-	}
-	cout << "\n";
-}
-
-float getValue(float U, float R_or_I, bool isParallel = true)
-{
-	if(U > 0 && R_or_I > 0)
-	{
-		if(isParallel)
-		{
-			return 1 / (U + R_or_I);
-		}
-		else
-		{
-			return U / R_or_I;
-		}
-	}
-	else
-	{
-		return -1;
-	}
-}
-
-void Task2()
-{
-	cout << "Выберете тип соединения:\n";
-	cout << "\t1) параллельное.\n";
-	cout << "\t2) последовательное.\n";
-	int userInput;
-
-	bool isCorrect = false;
-	float U;
-	float R_or_I;
-	while(isCorrect == false)
-	{
-		cin >> userInput;
-		if(userInput == 1)
-		{
-			isCorrect = true;
-			cout << "Параллельное\n";
-			cout << "Введите напряжения:";
-			cin >> U;
-			cout << "Введите сопротивление:";
-			cin >> R_or_I;
-			cout << getValue(U, R_or_I) << "\n";
-		}
-		else if(userInput == 2)
-		{
-			isCorrect = true;
-			cout << "Последовательное\n";
-			cout << "Введите сопротивление:";
-			cin >> R_or_I;
-			cout << "Введите напряжения:";
-			cin >> U;
-			cout << getValue(U, R_or_I) << "\n";
-		}
-		else
-		{
-			cout << "Такой команды нет!\n";
-		}
-	}
-}
-
-void CoutSpace(size_t count, char symbol = ' ')
-{
-	for(size_t j = 0; j < count; j++)
-	{
-		cout << symbol;
-	}
-}
-
-void Task3()
-{
-	// Выводит верхнюю часть
-	size_t headSize = 5; // размер конуса
-	size_t legSize = 5; // ширина стоек
-	size_t legLength = 5; // длинна стоек
-	size_t indent = 20; // отступ слева
-
-	size_t countSpace = 1;
-	size_t countIndet = headSize;
-	CoutSpace(countIndet + indent);
-	cout << "/\\" << "\n";
-	for(size_t i = 0; i < headSize; i++)
-	{
-		CoutSpace(countIndet - countSpace + indent);
-		cout << "/";
-		CoutSpace(countSpace * 2);
-		cout << "\\\n";
-		countSpace++;
-	}
-	countSpace *= 2;
-	countSpace--;
-
-	// вывод центральной части
-	size_t bodySize = headSize * 2;
-	for(size_t i = 0; i < bodySize; i++)
-	{
-		CoutSpace(indent);
-		cout << "|";
-
-		if(i == 2)
-		{
-			CoutSpace(countSpace / 2);
-			cout << "O";
-			CoutSpace(countSpace / 2);
-		}
-		else if(i == 5)
-		{
-			CoutSpace(countSpace / 2);
-			cout << "O";
-			CoutSpace(countSpace / 2);
-		}
-		else
-		{
-			CoutSpace(countSpace);
-		}
-
-		cout << "|\n";
+		_mileage = mileage;
 	}
 
-	// вывод нижней части (сойки)
-	size_t tailIndent = 0;
-	for(size_t i = 0; i < legSize; i++)
+	void ShowInfo()
 	{
-		CoutSpace(--indent);
-		cout << "/";
-		CoutSpace(tailIndent);
-		cout << "|";
-		CoutSpace(countSpace);
-		cout << "|";
-		CoutSpace(tailIndent++);
-		cout << "\\\n";
-	}
-	tailIndent--;
-
-	// Вывод длинны стоек
-	for(size_t i = 0; i < legLength; i++)
-	{
-		CoutSpace(indent);
-		cout << "|";
-		CoutSpace(tailIndent);
-		cout << "|";
-		CoutSpace(countSpace);
-		cout << "|";
-		CoutSpace(tailIndent);
-		cout << "|\n";
+		std::cout << "Car\n";
+		PrintInfo();
 	}
 
-	// вывод нижней линии
-	CoutSpace(indent);
-	cout << "|";
-	CoutSpace(tailIndent);
-	cout << "|";
-	CoutSpace(countSpace, '-');
-	cout << "|";
-	CoutSpace(tailIndent);
-	cout << "|\n";
-
-	// вывод нижней части стоек
-	tailIndent--;
-	for(size_t i = 0; i < legSize - 1; i++)
+	void Move()
 	{
-		CoutSpace(indent);
-		cout << "|";
-		CoutSpace(tailIndent);
-		cout << "/";
-		countSpace += 2;
-		CoutSpace(countSpace);
-		cout << "\\";
-		CoutSpace(tailIndent--);
-		cout << "|\n";
+		std::cout << "Я - машина. Еду по дороге.";
 	}
-}
+};
+
+
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
+	Transport transport;
 
-	Task1();
-	Task2();
-	Task3();
+	transport.ShowInfo();
+	transport.Move();
+
+	Car car;
+	car.ShowInfo();
+	car.Move();
+	system("pause");
 	return 0;
 }
